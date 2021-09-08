@@ -1,0 +1,20 @@
+{
+  "name": "js_boilerplate",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "<jacob@adaptinsurance.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "rm -rf dist && babel index.js --out-dir dist",
+    "start": "yarn build && node dist/index.js"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.15.4",
+    "@babel/core": "^7.15.5",
+    "@babel/plugin-transform-runtime": "^7.15.0",
+    "@babel/preset-env": "^7.15.4"
+  },
+  "dependencies": {
+    "axios": "^0.21.4"
+  }
+}
