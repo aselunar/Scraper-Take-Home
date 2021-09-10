@@ -6,15 +6,19 @@
   "license": "MIT",
   "scripts": {
     "build": "rm -rf dist && babel index.js --out-dir dist",
-    "start": "yarn build && node dist/index.js"
+    "start": "yarn build && node dist/index.js",
+    "watch": "nodemon --exec babel-node index.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.15.4",
     "@babel/core": "^7.15.5",
+    "@babel/node": "^7.15.4",
     "@babel/plugin-transform-runtime": "^7.15.0",
-    "@babel/preset-env": "^7.15.4"
+    "@babel/preset-env": "^7.15.4",
+    "nodemon": "^2.0.12"
   },
   "dependencies": {
-    "axios": "^0.21.4"
+    "axios": "^0.21.4",
+    "cheerio": "^1.0.0-rc.10"
   }
 }
