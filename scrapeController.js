@@ -10,8 +10,12 @@ const objOfUrls = {
   'PLACEHOLDER_CARRIER': 'https://scraping-interview.onrender.com/placeholder_carrier/'
 }
 
-const Policy = function() {
-
+const Policy = function([...arrayOfFields], [...arrayOfValues]) {
+ let fields = [...arrayOfFields];
+ let values = [...arrayOfValues];
+ for (let i = 0; i < fields.length; i++){
+   this[fields[i]] = values[i];
+ }
 }
 
 module.exports = {
@@ -24,7 +28,8 @@ module.exports = {
         let site = objOfUrls[customer.carrier];
         let fullUrl = `${site}` + `${customer.customerId}`;
         console.log(fullUrl);
-        res.locals[customer] = digestData(fullUrl);
+        res.locals.scrapedData[customer] = digestData(fullUrl);
+        console.log(res.locals.scrapedData);
       };
       return next();
     }
@@ -70,35 +75,66 @@ async function digestData(carrier){
 
 
   async function findData($){
-    const policies = new Map();
+    // const policies = new Map();
     // let policy = {};
     const tableHeaders = $('th');
+    const arrayOfFields = [];
+    let arrayOfValues = [];
     await tableHeaders.each((i, el) => {
       let header = $(el).text();
-      Policy.prototype[header] = null;
+      // Policy.prototype[header] = Policy.arguments[i];
       // console.log("header", header);
+      arrayOfFields.push(header);
     });
-    console.log(Policy.prototype);
-    const policyLength = Object.keys(Policy.prototype).length;
-    console.log("length", policyLength);
+    console.log("arrayOfFields", arrayOfFields);
+    // console.log("Policy", Policy.prototype);
+    // const policyLength = Object.keys(Policy.prototype).length;
+    // console.log("length", policyLength);
     const tableRows = $('tr');
     await tableRows.each((i, el) => {
-      let length = $(el).children().length;
-      if (length === policyLength){
-        const newPolicy = new Policy();
-        // for (let column of newPolicy){
+      let td = $(el).children();
+      let tdlength = td.length;
+      if (tdlength === arrayOfFields.length){
+        // let td = $(el).children().text();
+        // console.log(td);
+        td.each((i, el) => {
+          let text = $(el).text();
+          console.log("text", text);
+          arrayOfValues.push(text);
+        });
+        console.log(arrayOfValues);
+        if (arrayOfFields[0] != arrayOfValues[0]){
+          const newPolicy = new Policy(arrayOfFields, arrayOfValues);
+          console.log(newPolicy);
+          digestedData[newPolicy.Id] = newPolicy;
+        }
+        arrayOfValues = [];
+        console.log('digestedData', digestedData);
+
+
+        // console.log("arrayOfFields", arrayOfFields);
+        // console.log("arrayOfValues", arrayOfValues);
+        // const newPolicy = new Policy(1, 2, 3, 4, 5);
+        // console.log(newPolicy);
+        // newPolicy['Effective Date'] = 5;
+        // console.log(newPolicy.Premium)
+        // for (let column in newPolicy){
         //   let index = 0;
-          let td = $(el).children().eq(index).text();
+        // let td = $(el).children().text();
+        // const keys = Object.keys(newPolicy);
+        // console.log("keys", keys);
+        // console.log("i", i);
+        // newPolicy[Object.keys(newPolicy)[i]] = td;
         //   console.log("td", td);
         //   newPolicy[column] = td;
         //   // index++;
         // }
-        let td = $(el).children();
-        td.each((i, el) => {
-          newPolicy[i] = el;
-        })
+        // let td = $(el).children();
+        // td.each((i, el) => {
+        //   newPolicy[i] = el;
+        // })
         // newPolicy[i] = td;
-        console.log("policy", newPolicy);
+        // console.log("policy", newPolicy);
       }
 
     })
@@ -160,6 +196,7 @@ async function digestData(carrier){
   // console.log(ahref);
  
   // if (!$.includes('a href')) return digestedData;
+  return digestedData;
 }
 
 async function scrape(carrier) {
