@@ -1,11 +1,15 @@
-import axios from "axios";
-import cheerio from 'cheerio'
+const express = require('express');
+const app = express();
+// const path = require('path');
+const scrapeController = require('./scrapeController.js');
 
+app.use(express.json());
 
-async function scrape() {
-    const { data } = await axios.get("https://google.com")
-    const $ = cheerio.load(data)
-    console.log($('body').html())
-}
+app.post('/scrape', scrapeController.scrapify, (req, res) => {
+  // console.log(res.locals.scrapedData);
+  return res.status(200).send(res.locals.scrapedData);
+});
 
-scrape()
+console.log('a string');
+
+app.listen('3535', console.log('listening on port 3535'));
