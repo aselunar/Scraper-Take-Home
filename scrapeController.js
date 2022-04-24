@@ -10,6 +10,10 @@ const objOfUrls = {
   'PLACEHOLDER_CARRIER': 'https://scraping-interview.onrender.com/placeholder_carrier/'
 }
 
+const Policy = function() {
+
+}
+
 module.exports = {
 
   scrapify: async (req, res, next) => {
@@ -20,7 +24,7 @@ module.exports = {
         let site = objOfUrls[customer.carrier];
         let fullUrl = `${site}` + `${customer.customerId}`;
         console.log(fullUrl);
-        /*res.locals.$[customer] = */digestData(fullUrl);
+        res.locals[customer] = digestData(fullUrl);
       };
       return next();
     }
@@ -40,6 +44,7 @@ async function digestData(carrier){
   async function followLinks(carrier){
     const $ = await scrape(carrier);
     const ahref = $('a[href]');
+    findData($);
     // console.log('ahref', ahref);
     ahref.each((i, el) => {
       // console.log('el', el);
@@ -64,13 +69,79 @@ async function digestData(carrier){
   // await console.log("linkCache", linkCache);
 
 
-  // async function findData($){
-  //   const tables = $('table');
-  //   tables.each((el) => {
-  //     let tableHeading = $(el).children('th');
-  //     console.log(tableHeading);
-  //   })
-  // }
+  async function findData($){
+    const policies = new Map();
+    // let policy = {};
+    const tableHeaders = $('th');
+    await tableHeaders.each((i, el) => {
+      let header = $(el).text();
+      Policy.prototype[header] = null;
+      // console.log("header", header);
+    });
+    console.log(Policy.prototype);
+    const policyLength = Object.keys(Policy.prototype).length;
+    console.log("length", policyLength);
+    const tableRows = $('tr');
+    await tableRows.each((i, el) => {
+      let length = $(el).children().length;
+      if (length === policyLength){
+        const newPolicy = new Policy();
+        // for (let column of newPolicy){
+        //   let index = 0;
+          let td = $(el).children().eq(index).text();
+        //   console.log("td", td);
+        //   newPolicy[column] = td;
+        //   // index++;
+        // }
+        let td = $(el).children();
+        td.each((i, el) => {
+          newPolicy[i] = el;
+        })
+        // newPolicy[i] = td;
+        console.log("policy", newPolicy);
+      }
+
+    })
+
+    // console.log('$.body', $('body > div > table'));
+    // $('body > div > table').each((i, el) => {
+    //   console.log('el', el);
+    //   {
+    //     const ths = $(el).find('th');
+    //     $(ths).each((i, el) => {
+    //       console.log('ths el', el);
+    //     })
+    //   }
+    // })
+
+    // const tableRows = $('body > table > tbody > tr');
+    // console.log("tableRows", tableRows);
+    // parseTables($, tableRows);
+
+    // const tables = $('table');
+    // tables.each((i, el) => {
+    //   let tableHeading = $(el).children('th');
+    //   tableHeading.each((i, el) => {
+    //     let tableHeadingText = el.innerText;
+    //     console.log("tableHeadingText", tableHeadingText);
+    //   })
+
+    // })
+    // function parseTables($, tableRows){
+    //   console.log("we parsing");
+    //   console.log("tableRows", tableRows);
+    //   tableRows.each((i, el) => {
+    //     if (i === 0) {
+    //       const ths = $(el).find('th');
+    //       $(ths).each((i, el) => {
+    //         console.log("el", el.text());
+    //       })
+    //     }
+    //   })
+    // }
+  }
+
+
   // console.log($);
   // const linkCache = new Set();
   // console.log($);
@@ -98,4 +169,5 @@ async function scrape(carrier) {
   // console.log(pretty($('body').html()));
   return $;
 }
+
 
