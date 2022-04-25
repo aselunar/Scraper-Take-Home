@@ -7,6 +7,7 @@ app.use(express.json());
 // To start the app run npm run watch. Then make a post request to 
 // localhost:3535/scrape
 app.post('/scrape', scrapeController.scrapify, (req, res) => {
+    // Console logging json to satisfy the prompt.
   console.log(JSON.stringify(res.locals.scrapedData));
   return res.status(200).json(res.locals.scrapedData);
 });
