@@ -3,11 +3,12 @@
 Incomplete. Only scraping tables.
 
 ## How to use
-run 'npm i' and then 'npm run build'
-To start the app run npm run watch. Then make a post request to 
-localhost:3535/scrape
+run 'npm i' and then 'npm run build'<br>
+To start the app run npm run watch. Then make a post request to <br>
+localhost:3535/scrape<br>
 
-// Example input
+// Example input<br>
+
 /*
 [{
 	"carrier": "MOCK_INDEMNITY",
@@ -18,7 +19,8 @@ localhost:3535/scrape
 }]
 */
 
-// Which gives this output. Scraping only tables in all internal links.
+
+// Which gives this output. Scraping only tables in all internal links.<br>
 /*
 {
     "a0dfjw9a": {},
