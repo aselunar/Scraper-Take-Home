@@ -71,7 +71,7 @@ async function digestData(carrier){
   // Responds better to two await statements. Need to refactor.
   // Puppeteer is set up better to handle this kind of asynchronous activity.
   // With more time I would import it instead of recursively calling followLinks.
-  console.log("followLinks", await followLinks(carrier));
+  console.log('followLinks', await followLinks(carrier));
   return await followLinks(carrier);
 
   async function findData($){
