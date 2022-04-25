@@ -22,13 +22,13 @@ module.exports = {
 
   scrapify: async (req, res, next) => {
     try{
-
+      res.locals.scrapedData = {};
       const customerAndSiteInput = req.body;
       for (const customer of customerAndSiteInput){
         let site = objOfUrls[customer.carrier];
         let fullUrl = `${site}` + `${customer.customerId}`;
         console.log(fullUrl);
-        res.locals.scrapedData[customer] = digestData(fullUrl);
+        res.locals.scrapedData[customer.customerId] = digestData(fullUrl);
         console.log(res.locals.scrapedData);
       };
       return next();
