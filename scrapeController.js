@@ -76,8 +76,9 @@ async function digestData(carrier){
     // console.log(foundData);
     // return foundData;
 
-    // console.log("digestedData", digestedData);
-    return digestedData;
+    // console.log(await "digestedData", digestedData);
+    // This await is necessary to get the last page
+    return await digestedData;
   };
 
   // linkCache.add(carrier);
