@@ -7,7 +7,7 @@ run 'npm i' and then 'npm run build'<br>
 To start the app run 'npm run watch'. Then make a post request to <br>
 localhost:3535/scrape<br>
 
-// Example input<br>
+// Example req.body (JSON) input<br>
 
 /*
 [{
