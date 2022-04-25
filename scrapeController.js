@@ -37,7 +37,7 @@ module.exports = {
         res.locals.scrapedData[customer.customerId] = await digestData(fullUrl);
         // console.log(res.locals.scrapedData);
       };
-      return next();
+      return await next();
     }
     catch {
 
@@ -57,7 +57,7 @@ async function digestData(carrier){
     const ahref = $('a[href]');
     await findData($);
     // console.log('ahref', ahref);
-    ahref.each((i, el) => {
+    await ahref.each((i, el) => {
       // console.log('el', el);
       let link = $(el).attr();
       // console.log('link', link);
@@ -221,7 +221,7 @@ async function digestData(carrier){
 async function scrape(carrier) {
   console.log('we be scraping');
   const { data } = await axios.get(carrier);
-  const $ = cheerio.load(data);
+  const $ = await cheerio.load(data);
   // console.log(pretty($('body').html()));
   return $;
 }
