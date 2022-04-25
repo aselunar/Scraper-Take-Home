@@ -15,8 +15,10 @@ const Policy = function([...arrayOfFields], [...arrayOfValues]) {
  let values = [...arrayOfValues];
  for (let i = 0; i < fields.length; i++){
    this[fields[i]] = values[i];
- }
+ };
 }
+
+// const digestedData = {};
 
 module.exports = {
 
@@ -25,11 +27,15 @@ module.exports = {
       res.locals.scrapedData = {};
       const customerAndSiteInput = req.body;
       for (const customer of customerAndSiteInput){
+        // digestedData = {};
         let site = objOfUrls[customer.carrier];
         let fullUrl = `${site}` + `${customer.customerId}`;
         console.log(fullUrl);
-        res.locals.scrapedData[customer.customerId] = digestData(fullUrl);
-        console.log(res.locals.scrapedData);
+        // let digestedData = await digestData(fullUrl);
+        // console.log("digestedData", digestedData);
+        console.log("digestData", await digestData(fullUrl));
+        res.locals.scrapedData[customer.customerId] = await digestData(fullUrl);
+        // console.log(res.locals.scrapedData);
       };
       return next();
     }
@@ -49,28 +55,36 @@ async function digestData(carrier){
   async function followLinks(carrier){
     const $ = await scrape(carrier);
     const ahref = $('a[href]');
-    findData($);
+    await findData($);
     // console.log('ahref', ahref);
     ahref.each((i, el) => {
       // console.log('el', el);
       let link = $(el).attr();
-      console.log('link', link);
+      // console.log('link', link);
       if (!linkCache.has(link.href) && link.href !== '#'){
         // findData($);
-        console.log("type", link.href);
+        // console.log("type", link.href);
         linkCache.add(link.href);
-        console.log("linkCache", linkCache);
-        console.log("carrier", carrier);
+        // console.log("linkCache", linkCache);
+        // console.log("carrier", carrier);
         let fullPath = new URL(link.href, carrier);
         let arg = fullPath.href;
-        console.log("arg", fullPath);
-        followLinks(arg);
+        // console.log("arg", fullPath);
+        return new Promise(resolve => resolve(followLinks(arg)));
       }
     });
+    // console.log(foundData);
+    // return foundData;
+
+    // console.log("digestedData", digestedData);
+    return digestedData;
   };
 
   // linkCache.add(carrier);
-  await followLinks(carrier);
+  console.log("followLinks", await followLinks(carrier));
+  return await followLinks(carrier);
+  console.log("foundData", foundData);
+  return foundData;
   // await console.log("linkCache", linkCache);
 
 
@@ -86,7 +100,7 @@ async function digestData(carrier){
       // console.log("header", header);
       arrayOfFields.push(header);
     });
-    console.log("arrayOfFields", arrayOfFields);
+    // console.log("arrayOfFields", arrayOfFields);
     // console.log("Policy", Policy.prototype);
     // const policyLength = Object.keys(Policy.prototype).length;
     // console.log("length", policyLength);
@@ -99,17 +113,18 @@ async function digestData(carrier){
         // console.log(td);
         td.each((i, el) => {
           let text = $(el).text();
-          console.log("text", text);
+          // console.log("text", text);
           arrayOfValues.push(text);
         });
-        console.log(arrayOfValues);
+        // console.log(arrayOfValues);
         if (arrayOfFields[0] != arrayOfValues[0]){
           const newPolicy = new Policy(arrayOfFields, arrayOfValues);
-          console.log(newPolicy);
+          // console.log(newPolicy);
           digestedData[newPolicy.Id] = newPolicy;
         }
         arrayOfValues = [];
-        console.log('digestedData', digestedData);
+        
+        // console.log('digestedData', digestedData);
 
 
         // console.log("arrayOfFields", arrayOfFields);
@@ -136,7 +151,8 @@ async function digestData(carrier){
         // newPolicy[i] = td;
         // console.log("policy", newPolicy);
       }
-
+      // console.log("digestedData", digestedData);
+      // return digestedData;
     })
 
     // console.log('$.body', $('body > div > table'));
@@ -175,6 +191,7 @@ async function digestData(carrier){
     //     }
     //   })
     // }
+    return;
   }
 
 
@@ -196,7 +213,8 @@ async function digestData(carrier){
   // console.log(ahref);
  
   // if (!$.includes('a href')) return digestedData;
-  return digestedData;
+  // console.log('digestedData returned', digestedData);
+  // return digestedData;
 }
 
 async function scrape(carrier) {
