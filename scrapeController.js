@@ -2,8 +2,6 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 // importing pretty to make our console logs easier to read.
 const pretty = require('pretty');
-// importing express to make it easier to accept a request body and return a response.
-// const { url } = require('node');
 
 const objOfUrls = {
   'MOCK_INDEMNITY': 'https://scraping-interview.onrender.com/mock_indemnity/',
@@ -39,8 +37,12 @@ module.exports = {
       };
       return next();
     }
-    catch {
-
+    catch (error){
+      return next({
+        message: 'error in scraping',
+        status: 400,
+        log: `Error in scrapify middleware ${error}`
+      })
     }
   }
    
