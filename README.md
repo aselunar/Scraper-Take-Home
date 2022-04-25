@@ -105,3 +105,17 @@ localhost:3535/scrape<br>
     }
 }
 */
+
+## Part 2
+
+If I am designing against scraping, I would rate limit, require a login, use AI to detect patterns and create rules to counteract those scraping patterns, and have reference data for normal usage have a rule to block traffic that falls outside this normal usage.
+
+## Part 3
+
+To get around rate limitations, I would only try to scrape what I need and cache it, to minimize the amount of data I need in my request and responses when scraping. I would use multiple logins, so if one is blocked I can still scrape. Also, I would use multiple logins as a default to break up my scraping to get around rules for detecting unusual activity for a single account. This includes using different IP addresses (VPN) for each account. All of this would be automated. I would map my scraping times to be weighted more towards high-medium and medium times, because activity spikes are more likely to be detected at low usage periods. Finally, AI can also be used as a pro-scraping tool. With AI, I can create scraping rules based on when scraping has been more successful.
+
+Great references for anti scraping techniques:
+https://engineering.linkedin.com/blog/2021/using-deep-learning-to-detect-abusive-sequences-of-member-activi
+https://blog.linkedin.com/2021/july/15/linkedin-safety-series-what-is-scraping
+
+
